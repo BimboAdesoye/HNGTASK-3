@@ -1,8 +1,8 @@
-import SearchIcon from "../assets/Search.svg";
 import { Link } from "react-router-dom";
 import { auth } from "../config/firebase-config";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import SearchBar from "./SearchBar";
 
 const Navbar = ({ user }) => {
   const navigate = useNavigate();
@@ -16,10 +16,7 @@ const Navbar = ({ user }) => {
         <Link to={"/"} className="navbar-brand">
           galleria.
         </Link>
-        <form className="nav-form">
-          <input type="text" placeholder="Search for pictures by tag..." />
-          <img className="search-icon" src={SearchIcon} alt="search-icon" />
-        </form>
+        <SearchBar/>
         {user ? (
           <button onClick={logout} className="nav-btn">
             Log Out

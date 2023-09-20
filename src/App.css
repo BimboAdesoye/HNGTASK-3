@@ -123,3 +123,24 @@ body {
   border-radius: 3px;
   margin-top: 5px;
 }
+
+/* Search Results */
+.search-results {
+  position: absolute;
+  background-color: black;
+  color: white;
+  z-index: 1;
+  top: 80px;
+  border-radius: 5px;
+  padding: 0.6rem 1rem;
+  width: 30%;
+  height: 200px;
+  overflow-y: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.search-img {
+  width: 70px;
+  border-radius: 10px;
+}
