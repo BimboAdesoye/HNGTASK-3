@@ -1,22 +1,16 @@
-import { useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
-import {
-  // createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  // signOut,
-} from "firebase/auth";
+import { SpinnerCircular } from "spinners-react";
+import WelcomeNav from "./WelcomeNav";
+import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../config/firebase-config";
+import { useState, useEffect } from "react";
 
 const LogIn = () => {
-  // const [registerEmail, setRegisterEmail] = useState("");
-  // const [registerPassword, setRegisterPassword] = useState("");
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
   const [user, setUser] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const navigate = useNavigate();
 
@@ -30,78 +24,65 @@ const LogIn = () => {
     };
   }, []);
 
-  const isValidEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const handleEmailChange = (e) => {
-    const email = e.target.value;
-    setLoginEmail(email);
-
-    // Validate email format
-    if (!isValidEmail(email)) {
-      setEmailError("Invalid email format");
-    } else {
-      setEmailError("");
-    }
-  };
-
-  const handlePasswordChange = (e) => {
-    const password = e.target.value;
-    setLoginPassword(password);
-
-    // Validate password (e.g., minimum length)
-    if (password.length < 6) {
-      setPasswordError("Password must be at least 6 characters");
-    } else {
-      setPasswordError("");
-    }
-  };
-
-  // const register = async () => {
-  //   try {
-  //     const user = await createUserWithEmailAndPassword(
-  //       auth,
-  //       registerEmail,
-  //       registerPassword
-  //     );
-  //     console.log(user);
-  //   } catch (error) {
-  //     console.error(error.message);
-  //   }
-  // };
-
   const login = async () => {
     try {
+      setLoading(true);
       const user = await signInWithEmailAndPassword(
         auth,
         loginEmail,
         loginPassword
       );
-      alert(`You're logged in`);
-      navigate("/");
+      setLoading(false);
+      alert("You're logged in successfully");
+      navigate("/Home");
       console.log(user);
     } catch (error) {
       console.log(error.message);
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    login();
+  const validateForm = () => {
+    const errors = {};
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isFormatValid = emailPattern.test(loginEmail);
+
+    if (!loginEmail) {
+      errors.email = "Email is required!";
+    } else if (!isFormatValid) {
+      errors.email = "Enter valid email!";
+    }
+
+    if (!loginPassword) {
+      errors.password = "Password is required!";
+    } else if (loginPassword.length < 5) {
+      errors.password = "Password length must be greater than 5!";
+    }
+
+    return errors;
   };
 
-  // const logout = async () => {
-  //   await signOut(auth);
-  // };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length === 0) {
+      console.log("Form is valid");
+      setErrors({});
+      login();
+    } else {
+      setErrors(validationErrors);
+    }
+  };
   return (
     <div>
-      <Navbar user={user} />
-      <div className="log-in">
+      <WelcomeNav />
+      <div className="log-in d-flex align-items-center justify-center">
         <div className="log-in-content">
           <h1>Welcome</h1>
+          <p className="fw-bold text-center get-started">
+            Login to Get Started
+          </p>
           <form onSubmit={handleSubmit}>
             <div>
               <input
@@ -110,9 +91,9 @@ const LogIn = () => {
                 id="email"
                 placeholder="Email"
                 value={loginEmail}
-                onChange={handleEmailChange}
+                onChange={(e) => setLoginEmail(e.target.value)}
               />
-              {emailError && <p className="error-message">{emailError}</p>}
+              {errors.email && <p className="error-message">{errors.email}</p>}
             </div>
             <div>
               <input
@@ -121,35 +102,21 @@ const LogIn = () => {
                 id="password"
                 placeholder="Password"
                 value={loginPassword}
-                onChange={handlePasswordChange}
+                onChange={(e) => setLoginPassword(e.target.value)}
               />
-              {passwordError && (
-                <p className="error-message">{passwordError}</p>
+              {errors.password && (
+                <p className="error-message">{errors.password}</p>
               )}
             </div>
             <button
               type="submit"
               className="login-btn"
-              disabled={emailError || passwordError}
+              
             >
+              {loading && <SpinnerCircular size={30} />}
               Login
             </button>
           </form>
-          {/* <div>
-            <h3>Register User</h3>
-            <input
-              placeholder="Email..."
-              onChange={(e) => setRegisterEmail(e.target.value)}
-            />
-            <input
-              placeholder="Password..."
-              onChange={(e) => setRegisterPassword(e.target.value)}
-            />
-            <button onClick={register}>Create User</button>
-          </div> */}
-          <h4>User Logged In:</h4>
-          {user?.email}
-          {/* <button onClick={logout}>Sign Out</button> */}
         </div>
       </div>
     </div>

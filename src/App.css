@@ -47,6 +47,12 @@ body {
   text-align: center;
 }
 
+@media screen and (max-width: 768px) {
+  .hero {
+    padding-block: 70px;
+  }
+}
+
 .hero h1 {
   font-size: clamp(1.5rem, 3.5vw, 3.5rem);
   /* max-width: 1000px; */
@@ -64,7 +70,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 4rem;
+  padding: 4rem 10px;
   height: 85vh;
   background-color: #f2f2f2;
 }
@@ -73,12 +79,25 @@ body {
   padding: 3rem;
   background-color: white;
   border-radius: 5px;
+  width: clamp(300px, 100%, 430px);
+}
+
+@media screen and (max-width: 425px) {
+  .log-in-content {
+    width: 100%;
+    padding: 3rem 1rem;
+  }
 }
 
 .log-in-content h1 {
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   text-align: center;
   font-weight: bold;
+}
+
+.log-in-content .get-started {
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
 }
 
 .log-in-content form {
@@ -91,19 +110,23 @@ body {
   padding: 8px;
   border-radius: 5px;
   outline: none;
-  width: 300px;
+  width: 100%;
 }
 
 .login-btn {
   border: none;
   outline: none;
   padding: 8px;
-  width: 60%;
+  width: 80%;
   margin-inline: auto;
   color: white;
   background-color: black;
   border-radius: 5px;
   margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
 }
 
 .login-btn:hover {
@@ -111,9 +134,25 @@ body {
 }
 
 /* Gallery */
+.gallery {
+  margin-bottom: 2rem;
+  min-height: 40vh;
+}
 .image {
   margin-top: 10px;
-  outline: 1px solid brown;
+}
+
+.image img {
+  /* width: 400px; */
+  height: 300px;
+  width: clamp(300px, 100%, 430px);
+  border-radius: 5px;
+}
+
+@media screen and (max-width: 767px) {
+  .image img {
+    width: 100%;
+  }
 }
 
 .image-btn {
@@ -143,4 +182,13 @@ body {
 .search-img {
   width: 70px;
   border-radius: 10px;
+}
+
+.footer {
+  border-top: 2px solid black;
+}
+
+.error-message {
+  font-size: 16px;
+  color: red;
 }
