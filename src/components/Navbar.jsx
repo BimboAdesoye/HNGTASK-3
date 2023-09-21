@@ -6,10 +6,17 @@ import SearchBar from "./SearchBar";
 const Navbar = () => {
   const navigate = useNavigate();
 
-  const logout = async () => {
-    await signOut(auth);
-    navigate("/");
+  const logout = () => {
+    signOut(auth)
+      .then(() => {
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error("Logout failed:", error);
+      });
   };
+
+
   return (
     <nav className="navbar bg-body-tertiary">
       <div className="container">
