@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Images } from "../components/Images";
-import SearchIcon from "../assets/Search.svg";
 
 const SearchBar = () => {
   const [filteredData, setFilteredData] = useState([]);
@@ -25,7 +24,6 @@ const SearchBar = () => {
           placeholder="Search images by tags..."
           onChange={handleFilter}
         />
-        <img className="search-icon" src={SearchIcon} alt="search-icon" />
       </form>
       {filteredData.length != 0 && (
         <div className="search-results d-flex flex-column gap-3">
